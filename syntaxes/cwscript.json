@@ -1,0 +1,881 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "CWScript",
+  "scopeName": "source.cwscript",
+  "patterns": [
+    {
+      "include": "#cwspec"
+    },
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#punctuation"
+    },
+    {
+      "include": "#decl"
+    },
+    {
+      "include": "#strings"
+    }
+  ],
+  "repository": {
+    "cwspec": {
+      "patterns": [
+        {
+          "name": "comment.block.documentation",
+          "begin": "///",
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#cwspec-tags"
+            }
+          ]
+        },
+        {
+          "name": "comment.block.documentation",
+          "begin": "/\\*\\*",
+          "end": "\\*/",
+          "patterns": [
+            {
+              "include": "#cwspec-tags"
+            }
+          ]
+        }
+      ]
+    },
+    "cwspec-tags": {
+      "patterns": [
+        {
+          "include": "#cwspec-tag-title"
+        },
+        {
+          "include": "#cwspec-tag-author"
+        },
+        {
+          "include": "#cwspec-tag-note"
+        },
+        {
+          "include": "#cwspec-tag-info"
+        },
+        {
+          "include": "#cwspec-tag-tip"
+        },
+        {
+          "include": "#cwspec-tag-warning"
+        },
+        {
+          "include": "#cwspec-tag-danger"
+        },
+        {
+          "include": "#cwspec-tag-details"
+        },
+        {
+          "include": "#cwspec-tag-param"
+        },
+        {
+          "include": "#cwspec-tag-returns"
+        },
+        {
+          "include": "#cwspec-tag-response"
+        },
+        {
+          "include": "#cwspec-tag-member"
+        },
+        {
+          "include": "#cwspec-tag-key"
+        },
+        {
+          "include": "#cwspec-tag-value"
+        },
+        {
+          "include": "#cwspec-ref"
+        }
+      ]
+    },
+    "cwspec-tag-title": {
+      "name": "storage.type.title.cwspec",
+      "match": "(@title)\\b"
+    },
+    "cwspec-tag-author": {
+      "name": "storage.type.author.cwspec",
+      "match": "(@author)\\b"
+    },
+    "cwspec-tag-note": {
+      "match": "(@note)(\\s*(\\{[^\\}]*\\})\\s*)?\\b",
+      "captures": {
+        "1": {
+          "name": "storage.type.note.cwspec"
+        },
+        "3": {
+          "name": "markup.bold"
+        }
+      }
+    },
+    "cwspec-tag-info": {
+      "match": "(@info)(\\s*(\\{[^\\}]*\\})\\s*)?\\b",
+      "captures": {
+        "1": {
+          "name": "storage.type.info.cwspec"
+        },
+        "3": {
+          "name": "markup.bold"
+        }
+      }
+    },
+    "cwspec-tag-tip": {
+      "match": "(@tip)(\\s*(\\{[^\\}]*\\})\\s*)?\\b",
+      "captures": {
+        "1": {
+          "name": "storage.type.tip.cwspec"
+        },
+        "3": {
+          "name": "markup.bold"
+        }
+      }
+    },
+    "cwspec-tag-warning": {
+      "match": "(@warning)(\\s*(\\{[^\\}]*\\})\\s*)?\\b",
+      "captures": {
+        "1": {
+          "name": "storage.type.warning.cwspec"
+        },
+        "3": {
+          "name": "markup.bold"
+        }
+      }
+    },
+    "cwspec-tag-danger": {
+      "match": "(@danger)(\\s*(\\{[^\\}]*\\})\\s*)?\\b",
+      "captures": {
+        "1": {
+          "name": "storage.type.danger.cwspec"
+        },
+        "3": {
+          "name": "markup.bold"
+        }
+      }
+    },
+    "cwspec-tag-details": {
+      "match": "(@details)(\\s*(\\{[^\\}]*\\})\\s*)?\\b",
+      "captures": {
+        "1": {
+          "name": "storage.type.details.cwspec"
+        },
+        "3": {
+          "name": "markup.bold"
+        }
+      }
+    },
+    "cwspec-tag-param": {
+      "match": "(@param)(\\s+([A-Za-z_]\\w*))?\\b",
+      "captures": {
+        "1": {
+          "name": "storage.type.param.cwspec"
+        },
+        "3": {
+          "name": "variable.other.cwspec"
+        }
+      }
+    },
+    "cwspec-tag-returns": {
+      "name": "storage.type.returns.cwspec",
+      "match": "(@returns)\\b"
+    },
+    "cwspec-tag-response": {
+      "name": "storage.type.res.cwspec",
+      "match": "(@res|@response)\\b"
+    },
+    "cwspec-tag-member": {
+      "name": "storage.type.member.cwspec",
+      "match": "(@mem|@member)(\\s+([0-9]+|[a-zA-Z_][a-zA-Z_0-9]*))?\\b"
+    },
+    "cwspec-tag-key": {
+      "name": "storage.type.key.cwspec",
+      "match": "(@key)(:[a-zA-Z_][a-zA-Z_0-9]*)?\\b",
+      "captures": {
+        "1": {
+          "name": "storage.type.key.cwspec"
+        },
+        "2": {
+          "name": "variable.other.cwspec"
+        }
+      }
+    },
+    "cwspec-tag-value": {
+      "name": "storage.type.value.cwspec",
+      "match": "(@value|@val)\\b"
+    },
+    "cwspec-ref": {
+      "name": "storage.type.ref.cwspec",
+      "match": "@`([^-\\s]+)`",
+      "captures": {
+        "1": {
+          "name": "markup.underline.link"
+        }
+      }
+    },
+    "decl": {
+      "patterns": [
+        {
+          "include": "#decl-contract-or-interface"
+        },
+        {
+          "include": "#decl-struct"
+        },
+        {
+          "include": "#decl-enum"
+        },
+        {
+          "include": "#decl-error"
+        },
+        {
+          "include": "#decl-event"
+        },
+        {
+          "include": "#decl-state"
+        },
+        {
+          "include": "#decl-instantiate"
+        },
+        {
+          "include": "#decl-exec"
+        },
+        {
+          "include": "#decl-query"
+        },
+        {
+          "include": "#decl-migrate"
+        },
+        {
+          "include": "#decl-function"
+        }
+      ]
+    },
+    "decl-contract-or-interface": {
+      "patterns": [
+        {
+          "begin": "\\b(contract)\\b\\s*",
+          "end": "(?=(extends|implements|\\{))",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.contract"
+            }
+          },
+          "patterns": [
+            {
+              "match": "\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b",
+              "name": "entity.name.type.contract"
+            }
+          ]
+        },
+        {
+          "begin": "\\b(interface)\\b\\s*",
+          "end": "(?=(extends|\\{))",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.interface"
+            }
+          },
+          "patterns": [
+            {
+              "match": "\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b",
+              "name": "entity.name.type.interface"
+            }
+          ]
+        },
+        {
+          "begin": "\\b(extends)\\b\\s*",
+          "end": "(?=(implements|\\{))",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.modifier.extends"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#cwspec"
+            },
+            {
+              "include": "#comment"
+            },
+            {
+              "match": "\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b",
+              "name": "entity.name.type.contract"
+            }
+          ]
+        },
+        {
+          "begin": "\\b(implements)\\b\\s*",
+          "end": "(?=\\{)",
+          "beginCaptures": {
+            "1": null
+          },
+          "name": "storage.modifier.implements",
+          "patterns": [
+            {
+              "include": "#cwspec"
+            },
+            {
+              "include": "#comment"
+            },
+            {
+              "match": "\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b",
+              "name": "entity.name.type.interface"
+            }
+          ]
+        },
+        {
+          "begin": "(\\s*{\\s*)",
+          "end": "(\\s*}\\s*)",
+          "patterns": [
+            {
+              "include": "#cwspec"
+            },
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "#keywords"
+            },
+            {
+              "include": "#punctuation"
+            },
+            {
+              "include": "#decl"
+            }
+          ]
+        }
+      ]
+    },
+    "decl-struct": {
+      "patterns": [
+        {
+          "begin": "\\b(struct)\\b\\s*(?=\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b\\s*\\{)",
+          "end": "(?<=\\})",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.struct"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#cwspec"
+            },
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "#enum-variant-struct"
+            }
+          ]
+        },
+        {
+          "begin": "\\b(struct)\\b\\s*(?=\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b\\s*\\()",
+          "end": "(?<=\\))",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.struct"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#cwspec"
+            },
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "#enum-variant-tuple"
+            }
+          ]
+        },
+        {
+          "begin": "\\b(struct)\\b\\s*(?=\\b([a-zA-Z_][a-zA-Z_0-9]*)?\\b)",
+          "end": "(?<=\\s)",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.struct"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#cwspec"
+            },
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "#enum-variant-unit"
+            }
+          ]
+        }
+      ]
+    },
+    "decl-error": {
+      "patterns": [
+        {
+          "include": "#decl-error-single"
+        },
+        {
+          "include": "#decl-error-block"
+        }
+      ]
+    },
+    "decl-error-single": {
+      "patterns": [
+        {
+          "begin": "\\b(error)\\b\\s*(?=\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b\\s*\\{)",
+          "end": "(?<=\\})",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.error"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#cwspec"
+            },
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "#enum-variant-struct"
+            }
+          ]
+        },
+        {
+          "begin": "\\b(error)\\b\\s*(?=\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b\\s*\\()",
+          "end": "(?<=\\))",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.struct"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#cwspec"
+            },
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "#enum-variant-tuple"
+            }
+          ]
+        },
+        {
+          "match": "\\b(error)\\b\\s*(\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b)",
+          "captures": {
+            "1": {
+              "name": "storage.type.struct"
+            },
+            "2": {
+              "name": "entity.name.type.error"
+            }
+          }
+        }
+      ]
+    },
+    "decl-error-block": {
+      "patterns": [
+        {
+          "begin": "\\b(error)\\b\\s*\\{\\s*",
+          "end": "(\\s*\\})",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.error"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#cwspec"
+            },
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "#enum-variant"
+            }
+          ]
+        }
+      ]
+    },
+    "decl-event": {
+      "patterns": [
+        {
+          "include": "#decl-event-single"
+        },
+        {
+          "include": "#decl-event-block"
+        }
+      ]
+    },
+    "decl-event-single": {
+      "patterns": [
+        {
+          "begin": "\\b(event)\\b\\s*(?=\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b\\s*\\{)",
+          "end": "(?<=\\})",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.event"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#cwspec"
+            },
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "#enum-variant-struct"
+            }
+          ]
+        },
+        {
+          "begin": "\\b(event)\\b\\s*(?=\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b\\s*\\()",
+          "end": "(?<=\\))",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.event"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#cwspec"
+            },
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "#enum-variant-tuple"
+            }
+          ]
+        },
+        {
+          "begin": "\\b(event)\\b\\s*(?=\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b)",
+          "end": "(?=\\s)",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.event"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#cwspec"
+            },
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "#enum-variant-unit"
+            }
+          ]
+        }
+      ]
+    },
+    "decl-event-block": {
+      "begin": "\\b(event)\\b(\\s*\\{)",
+      "end": "(\\s*\\})",
+      "beginCaptures": {
+        "1": {
+          "name": "storage.type.event"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#enum-variant"
+        }
+      ]
+    },
+    "decl-state": {
+      "patterns": [
+        {
+          "include": "#decl-state-single"
+        },
+        {
+          "include": "#decl-state-block"
+        }
+      ]
+    },
+    "decl-state-single": {
+      "patterns": [
+        {
+          "begin": "\\b(state)\\b\\s*\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b\\s*:",
+          "end": "(?=(event|error|exec|instantiate|migrate|query|type|struct|enum|fn|state|\\}))",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.modifier.state"
+            },
+            "2": {
+              "name": "variable.other"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#type-expr"
+            }
+          ]
+        },
+        {
+          "begin": "\\b(state)\\b\\s*\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b\\s*(?=\\[)",
+          "end": "(?=(event|error|exec|instantiate|migrate|query|type|struct|enum|fn|state|\\}|\\s))",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.modifier.state"
+            },
+            "2": {
+              "name": "variable.other"
+            }
+          },
+          "patterns": [
+            {
+              "begin": "(\\[)\\s*\\b(\\w+)\\b\\s*:(?!:)",
+              "end": "(\\])",
+              "beginCaptures": {
+                "2": {
+                  "name": "variable.other"
+                }
+              },
+              "patterns": [
+                {
+                  "include": "#type-expr"
+                }
+              ]
+            },
+            {
+              "begin": "(\\[)",
+              "end": "(\\])",
+              "patterns": [
+                {
+                  "include": "#type-expr"
+                }
+              ]
+            },
+            {
+              "begin": "(?<=\\]):(?!:)\\s*",
+              "end": "(?=(event|error|exec|instantiate|migrate|query|type|fn|state|\\}))",
+              "patterns": [
+                {
+                  "include": "#type-expr"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "decl-state-block": {
+      "begin": "\\b(state)\\b(\\s*\\{)",
+      "end": "(\\s*\\})",
+      "beginCaptures": {
+        "1": {
+          "name": "storage.modifier.state"
+        }
+      },
+      "patterns": [
+        {
+          "begin": "\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b\\s*:\\s*",
+          "end": "(?=\\}|\\b[a-zA-Z_][a-zA-Z_0-9]*\\b\\s*(\\[.*\\])|(\\b[a-zA-Z_][a-zA-Z_0-9]*\\b\\s*(\\[.*\\])*):(?!:))",
+          "beginCaptures": {
+            "1": {
+              "name": "variable.other"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#type-expr"
+            }
+          ]
+        },
+        {
+          "begin": "\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b\\s*(?=\\[)",
+          "end": "(?=\\}|\\b[a-zA-Z_][a-zA-Z_0-9]*\\b\\s*(\\[.*\\])|(\\b[a-zA-Z_][a-zA-Z_0-9]*\\b\\s*(\\[.*\\])*):(?!:))",
+          "beginCaptures": {
+            "1": {
+              "name": "variable.other"
+            }
+          },
+          "patterns": [
+            {
+              "begin": "(\\[)\\s*\\b(\\w+)\\b\\s*:(?!:)",
+              "end": "(\\])",
+              "beginCaptures": {
+                "2": {
+                  "name": "variable.other"
+                }
+              },
+              "patterns": [
+                {
+                  "include": "#type-expr"
+                }
+              ]
+            },
+            {
+              "begin": "(\\[)",
+              "end": "(\\])",
+              "patterns": [
+                {
+                  "include": "#type-expr"
+                }
+              ]
+            },
+            {
+              "begin": "(?<=\\]):(?!:)\\s*",
+              "end": "(?=\\}|\\b[a-zA-Z_][a-zA-Z_0-9]*\\b\\s*(\\[.*\\])|(\\b[a-zA-Z_][a-zA-Z_0-9]*\\b\\s*(\\[.*\\])*):(?!:))",
+              "patterns": [
+                {
+                  "include": "#type-expr"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "type-expr": {
+      "patterns": [
+        {
+          "include": "#cwspec"
+        },
+        {
+          "include": "#comment"
+        },
+        {
+          "include": "#keywords"
+        },
+        {
+          "include": "#punctuation"
+        },
+        {
+          "include": "#paramzd-type"
+        },
+        {
+          "include": "#type-name"
+        }
+      ]
+    },
+    "enum-variant": {
+      "patterns": [
+        {
+          "include": "#cwspec"
+        },
+        {
+          "include": "#comment"
+        },
+        {
+          "include": "#enum-variant-struct"
+        },
+        {
+          "include": "#enum-variant-tuple"
+        },
+        {
+          "include": "#enum-variant-unit"
+        }
+      ]
+    },
+    "enum-variant-struct": {
+      "begin": "\\b(\\w+)\\b\\s*(\\{)",
+      "end": "(\\})",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.name.type.struct"
+        }
+      },
+      "patterns": [
+        {
+          "begin": "(\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b(\\?)?)\\s*:\\s*",
+          "end": "(?=(,|\\}))",
+          "beginCaptures": {
+            "1": {
+              "name": "variable.parameter.other"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#cwspec"
+            },
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "#type-expr"
+            }
+          ]
+        }
+      ]
+    },
+    "enum-variant-tuple": {
+      "begin": "\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b\\s*(\\()",
+      "end": "(\\))",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.name.type.struct"
+        }
+      },
+      "patterns": [
+        {
+          "begin": "(\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b(\\?)?)\\s*:\\s*",
+          "end": "(?=,|\\))",
+          "beginCaptures": {
+            "1": {
+              "name": "variable.parameter.other"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#cwspec"
+            },
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "#type-expr"
+            }
+          ]
+        },
+        {
+          "include": "#type-expr"
+        }
+      ]
+    },
+    "enum-variant-unit": {
+      "match": "\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b",
+      "name": "entity.name.type.struct"
+    },
+    "type-name": {
+      "match": "(::)?(\\b[a-zA-Z_][a-zA-Z_0-9]*\\b)((::)(\\b[a-zA-Z_][a-zA-Z_0-9]*\\b))*",
+      "name": "entity.name.type.type"
+    },
+    "paramzd-type": {
+      "begin": "((::)?(\\b[a-zA-Z_][a-zA-Z_0-9]*\\b)((::)(\\b[a-zA-Z_][a-zA-Z_0-9]*\\b))*)(<)",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.name.type.type"
+        }
+      },
+      "end": "(?=\\)|\\}|\\s)|(>)",
+      "patterns": [
+        {
+          "include": "#cwspec"
+        },
+        {
+          "include": "#comment"
+        },
+        {
+          "include": "#punctuation"
+        },
+        {
+          "include": "#keywords"
+        },
+        {
+          "include": "#type-expr"
+        }
+      ]
+    }
+  }
+}

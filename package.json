@@ -1,0 +1,41 @@
+{
+  "name": "cwscript",
+  "displayName": "CWScript",
+  "description": "Language support for CWScript",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.63.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "cwscript",
+        "aliases": [
+          "CWScript",
+          "cwscript"
+        ],
+        "extensions": [
+          ".cws"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "cwscript",
+        "scopeName": "source.cwscript",
+        "path": "./syntaxes/cwscript.json"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "y2j",
+    "y2j": "js-yaml syntaxes/cwscript.yaml > syntaxes/cwscript.json"
+  },
+  "devDependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}

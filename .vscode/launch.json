@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "./cw20-base.cws"
+            ],
+            "name": "Launch Extension",
+            "runtimeExecutable": "${execPath}",
+            "outFiles": [
+                "${workspaceFolder}/out/**/*.js"
+            ],
+            "preLaunchTasks": "open-example",
+            "sourceMaps": true,
+            "request": "launch",
+            "type": "pwa-extensionHost",
+            "stopOnEntry": false,
+        },
+    ],
+}

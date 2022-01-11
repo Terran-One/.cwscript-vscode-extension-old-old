@@ -1,0 +1,155 @@
+import * from "./cw20.cws"
+
+/// Translation of CW20-base
+/// @author William Chen <william@terran.one>
+contract CW20Base extends CW2 implements
+    CW20Mintable,
+    CW20Allowances,
+    CW20Marketing,
+    CW20Enumerable,
+    CW20AllowancesEnumerable
+{    
+
+    struct Item{a: sdfsdf, b: sdfsdf<sdfsdf>, sdfd: sdfsd}
+
+    /// When 0 tokens is provided as amount
+    /// @note {sdfsdf} sdfsdf
+    /// @tip { sdfsd } sdfsdf
+    error InvalidZeroAmount
+    error TupleTest(sdfsdf, sdfsdf)
+    error StructTest(sdfsdf: sdfsdf<sdfds>, item: sdfsdf)
+
+
+    /// @param sender Sending account
+    /// @param recipient Receiving account
+    /// @param amount Number of tokens transferred
+    event Transfer(sender: Addr, recipient: Addr, amount: Uint128)
+
+    /// Emitted when tokens are burned.
+    /// @param sender Account from which tokens are burned
+    /// @param amount Number of tokens burned
+    event Burn(sender: Addr, amount: Uint128)
+
+    /// Emitted when new tokens are minted.
+    /// @param minter Account initiating mint operation
+    /// @param recipient Account receiving the newly minted tokens
+    /// @param amount Number of newly minted tokens
+    event Mint(minter: Addr, recipient: Addr, amount: Uint128)
+
+    /// Emitted when tokens are transferred in a `exec:send` operation
+    /// @param sender Sending account
+    /// @param contract Address of contract called
+    /// @param amount Number of tokens sent 
+    event Send(sender: Addr, contract: Addr, amount: Uint128)
+
+    error {
+        Send {
+            sneder: Addr
+        }
+        Send(sender: Addr)
+        Send
+    }
+
+    event {
+        Send(sender: Addr)
+        Send{
+            sender: Addr
+        },
+        Send
+    }
+
+    /// Token information.
+    state token_info: Uint128
+    state token_info[sdf: sdfsdfd]: Uint123<sdfsdf>
+    state item: Uint128
+
+    state {
+        token_info: Uint128::sdf<sdfassdf<sdf, sd>
+        token_info[sdk: sdks]: Uint128<sdf, sdfsd>
+        item: Uint128::sd<sdfs>
+    }
+
+    /// Maps the account address to their corresponding balance.
+    /// @key:account Address of account
+    /// @value Number of tokens held by `account`
+    
+    /// @param name Token name
+    /// @param symbol Token symbol
+    /// @param decimals Number of decimal places for one unit of token
+    /// @param initial_balances List of addresses and their initial token balances
+    /// @param mint Minter information
+    instantiate(
+        name: String,
+        symbol: String,
+        decimals: u8,
+        initial_balances: struct Cw20Coin { address: Addr, amount: Uint128 }[],
+        mint?: $CW20.query.mint.response
+    ) {
+        let total_supply: Uint128 = Uint128(0)
+        for { address, amount } in initial_balances {
+            state.balances[address]
+            total_supply += amount
+        }
+
+        state.token_info = _ {
+            name: name,
+            symbol: symbol,
+            decimals: decimals,
+            total_supply: total_supply,
+        }
+    }
+
+    exec transfer(recipient: Addr, amount: Uint128) {
+        state.balances[msg.sender] -= amount
+        state.balances[recipient] += amount
+        emit Transfer(msg.sender, recipient, amount)
+    }
+
+    exec burn(amount: Uint128) {
+        state.balances[msg.sender] -= amount
+        state.token_supply -= amount
+        emit Burn(msg.sender, amount)
+    }
+
+    exec mint(recipient: Addr, amount: Uint128) {
+        config = state.token_info
+        if (config.mint == None) or (config.mint.minter != msg.sender) {
+            fail Unauthorized 
+        }
+
+        config.total_supply += amount
+        if (config.get_cap()) and config.total_supply > limit {
+            fail CannotExceedCap
+        }
+
+        state.token_info = config
+        state.balances[recipient] += amount
+        emit Mint(minter, recipient, amount)
+    }
+
+    exec send(contract_addr: Addr, amount: Uint128, msg: Binary) {
+        state.balances[msg.sender] -= amount
+        state.balances[contract] += amount
+        emit Send(msg.sender, contract, amount)
+        exec CW20Receiver(contract).receive(sender: msg.sender, item: amount, fire: msg)
+    }
+
+    query balance(address: Addr) => _ {
+        balance: state.balances[address] or 0
+    }
+
+    query token_info() => _ {
+        token_info: state.token_info
+    }
+
+    exec mint(recipient: Addr, amount: Uint128) {
+
+    }
+
+    query minter() -> _ {
+        let minter = state.token_info.minter
+        return minter
+    }
+
+
+}
