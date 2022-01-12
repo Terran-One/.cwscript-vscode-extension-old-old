@@ -190,8 +190,15 @@
       "match": "(@res|@response)\\b"
     },
     "cwspec-tag-member": {
-      "name": "storage.type.member.cwspec",
-      "match": "(@mem|@member)(\\s+([0-9]+|[a-zA-Z_][a-zA-Z_0-9]*))?\\b"
+      "match": "(@mem|@member)(\\s+([0-9]+|[a-zA-Z_][a-zA-Z_0-9]*))?\\b",
+      "captures": {
+        "1": {
+          "name": "storage.type.member.cwspec"
+        },
+        "3": {
+          "name": "variable.other.cwspec"
+        }
+      }
     },
     "cwspec-tag-key": {
       "name": "storage.type.key.cwspec",
@@ -297,12 +304,6 @@
           },
           "patterns": [
             {
-              "include": "#cwspec"
-            },
-            {
-              "include": "#comment"
-            },
-            {
               "match": "\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b",
               "name": "entity.name.type.contract"
             }
@@ -317,12 +318,6 @@
           "name": "storage.modifier.implements",
           "patterns": [
             {
-              "include": "#cwspec"
-            },
-            {
-              "include": "#comment"
-            },
-            {
               "match": "\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b",
               "name": "entity.name.type.interface"
             }
@@ -333,16 +328,7 @@
           "end": "(\\s*}\\s*)",
           "patterns": [
             {
-              "include": "#cwspec"
-            },
-            {
-              "include": "#comment"
-            },
-            {
               "include": "#keywords"
-            },
-            {
-              "include": "#punctuation"
             },
             {
               "include": "#decl"
@@ -363,12 +349,6 @@
           },
           "patterns": [
             {
-              "include": "#cwspec"
-            },
-            {
-              "include": "#comment"
-            },
-            {
               "include": "#enum-variant-struct"
             }
           ]
@@ -383,35 +363,20 @@
           },
           "patterns": [
             {
-              "include": "#cwspec"
-            },
-            {
-              "include": "#comment"
-            },
-            {
               "include": "#enum-variant-tuple"
             }
           ]
         },
         {
-          "begin": "\\b(struct)\\b\\s*(?=\\b([a-zA-Z_][a-zA-Z_0-9]*)?\\b)",
-          "end": "(?<=\\s)",
-          "beginCaptures": {
+          "match": "\\b(struct)\\b\\s*\\b([a-zA-Z_][a-zA-Z_0-9]*)?\\b",
+          "captures": {
             "1": {
               "name": "storage.type.struct"
-            }
-          },
-          "patterns": [
-            {
-              "include": "#cwspec"
             },
-            {
-              "include": "#comment"
-            },
-            {
-              "include": "#enum-variant-unit"
+            "2": {
+              "name": "entity.name.type.struct"
             }
-          ]
+          }
         }
       ]
     },
@@ -437,12 +402,6 @@
           },
           "patterns": [
             {
-              "include": "#cwspec"
-            },
-            {
-              "include": "#comment"
-            },
-            {
               "include": "#enum-variant-struct"
             }
           ]
@@ -456,12 +415,6 @@
             }
           },
           "patterns": [
-            {
-              "include": "#cwspec"
-            },
-            {
-              "include": "#comment"
-            },
             {
               "include": "#enum-variant-tuple"
             }
@@ -492,12 +445,6 @@
           },
           "patterns": [
             {
-              "include": "#cwspec"
-            },
-            {
-              "include": "#comment"
-            },
-            {
               "include": "#enum-variant"
             }
           ]
@@ -517,6 +464,12 @@
     "decl-event-single": {
       "patterns": [
         {
+          "include": "#cwspec"
+        },
+        {
+          "include": "#comment"
+        },
+        {
           "begin": "\\b(event)\\b\\s*(?=\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b\\s*\\{)",
           "end": "(?<=\\})",
           "beginCaptures": {
@@ -525,12 +478,6 @@
             }
           },
           "patterns": [
-            {
-              "include": "#cwspec"
-            },
-            {
-              "include": "#comment"
-            },
             {
               "include": "#enum-variant-struct"
             }
@@ -546,12 +493,6 @@
           },
           "patterns": [
             {
-              "include": "#cwspec"
-            },
-            {
-              "include": "#comment"
-            },
-            {
               "include": "#enum-variant-tuple"
             }
           ]
@@ -565,12 +506,6 @@
             }
           },
           "patterns": [
-            {
-              "include": "#cwspec"
-            },
-            {
-              "include": "#comment"
-            },
             {
               "include": "#enum-variant-unit"
             }
@@ -679,6 +614,12 @@
       },
       "patterns": [
         {
+          "include": "#cwspec"
+        },
+        {
+          "include": "#comment"
+        },
+        {
           "begin": "\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b\\s*:\\s*",
           "end": "(?=\\}|\\b[a-zA-Z_][a-zA-Z_0-9]*\\b\\s*(\\[.*\\])|(\\b[a-zA-Z_][a-zA-Z_0-9]*\\b\\s*(\\[.*\\])*):(?!:))",
           "beginCaptures": {
@@ -737,6 +678,140 @@
         }
       ]
     },
+    "decl-instantiate": {
+      "patterns": [
+        {
+          "begin": "\\b(instantiate)\\b\\s*(?=\\()",
+          "end": "(?<=\\))",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.modifier.instantiate"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#fn-args"
+            }
+          ]
+        },
+        {
+          "begin": "\\{",
+          "end": "\\}",
+          "patterns": [
+            {
+              "include": "#fn-body"
+            }
+          ]
+        }
+      ]
+    },
+    "decl-exec": {
+      "patterns": [
+        {
+          "begin": "\\b(exec)\\b\\s+(\\b\\w+\\b)?\\s*(?=\\()",
+          "end": "(?<=\\))",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.modifier.exec"
+            },
+            "2": {
+              "name": "entity.name.function.exec"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#fn-args"
+            }
+          ]
+        },
+        {
+          "begin": "\\{",
+          "end": "\\}",
+          "patterns": [
+            {
+              "include": "#fn-body"
+            }
+          ]
+        }
+      ]
+    },
+    "decl-query": {
+      "patterns": [
+        {
+          "begin": "\\b(query)\\b\\s+(\\b\\w+\\b)?\\s*(?=\\()",
+          "end": "(?<=\\))",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.modifier.query"
+            },
+            "2": {
+              "name": "entity.name.function.exec"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#fn-args"
+            }
+          ]
+        },
+        {
+          "begin": "\\{",
+          "end": "\\}",
+          "patterns": [
+            {
+              "include": "#fn-body"
+            }
+          ]
+        }
+      ]
+    },
+    "decl-migrate": {
+      "patterns": [
+        {
+          "begin": "\\b(migrate)\\b\\s*(?=\\()",
+          "end": "(?<=\\))",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.modifier.exec"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#fn-args"
+            }
+          ]
+        },
+        {
+          "begin": "\\{",
+          "end": "\\}",
+          "patterns": [
+            {
+              "include": "#fn-body"
+            }
+          ]
+        }
+      ]
+    },
+    "fn-args": {
+      "begin": "\\(\\s*",
+      "end": "\\s*\\)",
+      "patterns": [
+        {
+          "begin": "(\\b([a-zA-Z_][a-zA-Z_0-9]*)\\b(\\??))\\s*:\\s*",
+          "beginCaptures": {
+            "1": {
+              "name": "variable.parameter.other"
+            }
+          },
+          "end": "(?=,|\\))",
+          "patterns": [
+            {
+              "include": "#type-expr"
+            }
+          ]
+        }
+      ]
+    },
     "type-expr": {
       "patterns": [
         {
@@ -749,7 +824,7 @@
           "include": "#keywords"
         },
         {
-          "include": "#punctuation"
+          "include": "#decl-struct"
         },
         {
           "include": "#paramzd-type"
@@ -797,12 +872,6 @@
           },
           "patterns": [
             {
-              "include": "#cwspec"
-            },
-            {
-              "include": "#comment"
-            },
-            {
               "include": "#type-expr"
             }
           ]
@@ -827,12 +896,6 @@
             }
           },
           "patterns": [
-            {
-              "include": "#cwspec"
-            },
-            {
-              "include": "#comment"
-            },
             {
               "include": "#type-expr"
             }
@@ -861,21 +924,83 @@
       "end": "(?=\\)|\\}|\\s)|(>)",
       "patterns": [
         {
-          "include": "#cwspec"
-        },
-        {
-          "include": "#comment"
-        },
-        {
-          "include": "#punctuation"
-        },
-        {
-          "include": "#keywords"
-        },
-        {
           "include": "#type-expr"
         }
       ]
+    },
+    "keywords-modifiers": {
+      "match": "\\b(mut)\\b",
+      "name": "storage.modifier.mut"
+    },
+    "keywords-control-flow": {
+      "name": "keyword.control",
+      "match": "\\b(if|while|for|return)\\b"
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "include": "#keywords-control-flow"
+        },
+        {
+          "include": "#keywords-modifiers"
+        }
+      ]
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "name": "punctuation.accessor",
+          "match": "\\."
+        },
+        {
+          "name": "punctuation.separator",
+          "match": ","
+        },
+        {
+          "name": "punctuation.brace.curly.begin",
+          "match": "\\{"
+        },
+        {
+          "name": "punctuation.brace.curly.end",
+          "match": "\\}"
+        },
+        {
+          "name": "punctuation.brace.square.begin",
+          "match": "\\["
+        },
+        {
+          "name": "punctuation.brace.square.begin",
+          "match": "\\]"
+        },
+        {
+          "name": "punctuation.parameters.begin",
+          "match": "\\("
+        },
+        {
+          "name": "punctuation.parameters.end",
+          "match": "\\)"
+        }
+      ]
+    },
+    "comment": {
+      "patterns": [
+        {
+          "include": "#comment-line"
+        },
+        {
+          "include": "#comment-block"
+        }
+      ]
+    },
+    "comment-line": {
+      "name": "comment.line",
+      "begin": "(?<!:)//",
+      "end": "$"
+    },
+    "comment-block": {
+      "name": "comment.block",
+      "begin": "/\\*",
+      "end": "\\*/"
     }
   }
 }

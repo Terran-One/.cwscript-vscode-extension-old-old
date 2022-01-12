@@ -51,7 +51,9 @@ contract CW20Base extends CW2 implements
     }
 
     event {
-        Send(sender: Addr)
+        Send(
+            sender: Addr
+        )
         Send{
             sender: Addr
         },
@@ -65,7 +67,7 @@ contract CW20Base extends CW2 implements
 
     state {
         token_info: Uint128::sdf<sdfassdf<sdf, sd>
-        token_info[sdk: sdks]: Uint128<sdf, sdfsd>
+        token_info[sdk: sdks][sdfd: sdf]: Uint128<sdf, sdfsd>
         item: Uint128::sd<sdfs>
     }
 

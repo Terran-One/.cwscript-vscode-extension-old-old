@@ -101,8 +101,12 @@ repository:
     name: "storage.type.res.cwspec"
     match: "(@res|@response)\\b"
   cwspec-tag-member:
-    name: "storage.type.member.cwspec"
     match: "(@mem|@member)(\\s+([0-9]+|[a-zA-Z_][a-zA-Z_0-9]*))?\\b"
+    captures:
+      "1":
+        name: storage.type.member.cwspec
+      "3":
+        name: "variable.other.cwspec"
   cwspec-tag-key:
     name: "storage.type.key.cwspec"
     match: '(@key)(:[a-zA-Z_][a-zA-Z_0-9]*)?\b'
@@ -157,28 +161,23 @@ repository:
           "1":
             name: "storage.modifier.extends"
         patterns:
-          - include: "#cwspec"
-          - include: "#comment"
           - match: \b([a-zA-Z_][a-zA-Z_0-9]*)\b
             name: entity.name.type.contract
+
       - begin: \b(implements)\b\s*
         end: (?=\{)
         beginCaptures:
           "1":
         name: storage.modifier.implements
         patterns:
-          - include: "#cwspec"
-          - include: "#comment"
           - match: \b([a-zA-Z_][a-zA-Z_0-9]*)\b
             name: entity.name.type.interface
       - begin: (\s*{\s*)
         end: (\s*}\s*)
         patterns:
-          - include: "#cwspec"
-          - include: "#comment"
           - include: "#keywords"
-          - include: "#punctuation"
           - include: "#decl"
+
   decl-struct:
     patterns:
       - begin: \b(struct)\b\s*(?=\b([a-zA-Z_][a-zA-Z_0-9]*)\b\s*\{)
@@ -187,27 +186,22 @@ repository:
           "1":
             name: storage.type.struct
         patterns:
-          - include: "#cwspec"
-          - include: "#comment"
           - include: "#enum-variant-struct"
+
       - begin: \b(struct)\b\s*(?=\b([a-zA-Z_][a-zA-Z_0-9]*)\b\s*\()
         end: (?<=\))
         beginCaptures:
           "1":
             name: storage.type.struct
         patterns:
-          - include: "#cwspec"
-          - include: "#comment"
           - include: "#enum-variant-tuple"
-      - begin: \b(struct)\b\s*(?=\b([a-zA-Z_][a-zA-Z_0-9]*)?\b)
-        end: (?<=\s)
-        beginCaptures:
+
+      - match: \b(struct)\b\s*\b([a-zA-Z_][a-zA-Z_0-9]*)?\b
+        captures:
           "1":
             name: storage.type.struct
-        patterns:
-          - include: "#cwspec"
-          - include: "#comment"
-          - include: "#enum-variant-unit"
+          "2":
+            name: entity.name.type.struct
   decl-error:
     patterns:
       - include: "#decl-error-single"
@@ -220,18 +214,16 @@ repository:
           "1":
             name: storage.type.error
         patterns:
-          - include: "#cwspec"
-          - include: "#comment"
           - include: "#enum-variant-struct"
+
       - begin: \b(error)\b\s*(?=\b([a-zA-Z_][a-zA-Z_0-9]*)\b\s*\()
         end: (?<=\))
         beginCaptures:
           "1":
             name: storage.type.struct
         patterns:
-          - include: "#cwspec"
-          - include: "#comment"
           - include: "#enum-variant-tuple"
+
       - match: \b(error)\b\s*(\b([a-zA-Z_][a-zA-Z_0-9]*)\b)
         captures:
           "1":
@@ -247,42 +239,40 @@ repository:
           "1":
             name: storage.type.error
         patterns:
-          - include: "#cwspec"
-          - include: "#comment"
           - include: "#enum-variant"
+
   decl-event:
     patterns:
       - include: "#decl-event-single"
       - include: "#decl-event-block"
   decl-event-single:
     patterns:
+      - include: "#cwspec"
+      - include: "#comment"
       - begin: \b(event)\b\s*(?=\b([a-zA-Z_][a-zA-Z_0-9]*)\b\s*\{)
         end: (?<=\})
         beginCaptures:
           "1":
             name: storage.type.event
         patterns:
-          - include: "#cwspec"
-          - include: "#comment"
           - include: "#enum-variant-struct"
+
       - begin: \b(event)\b\s*(?=\b([a-zA-Z_][a-zA-Z_0-9]*)\b\s*\()
         end: (?<=\))
         beginCaptures:
           "1":
             name: storage.type.event
         patterns:
-          - include: "#cwspec"
-          - include: "#comment"
           - include: "#enum-variant-tuple"
+
       - begin: \b(event)\b\s*(?=\b([a-zA-Z_][a-zA-Z_0-9]*)\b)
         end: (?=\s)
         beginCaptures:
           "1":
             name: storage.type.event
         patterns:
-          - include: "#cwspec"
-          - include: "#comment"
           - include: "#enum-variant-unit"
+
   decl-event-block:
     begin: \b(event)\b(\s*\{)
     end: (\s*\})
@@ -329,6 +319,7 @@ repository:
             end: (?=(event|error|exec|instantiate|migrate|query|type|fn|state|\}))
             patterns:
               - include: "#type-expr"
+
   decl-state-block:
     begin: \b(state)\b(\s*\{)
     end: (\s*\})
@@ -336,6 +327,8 @@ repository:
       "1":
         name: storage.modifier.state
     patterns:
+      - include: "#cwspec"
+      - include: "#comment"
       - begin: '\b([a-zA-Z_][a-zA-Z_0-9]*)\b\s*:\s*'
         end: (?=\}|\b[a-zA-Z_][a-zA-Z_0-9]*\b\s*(\[.*\])|(\b[a-zA-Z_][a-zA-Z_0-9]*\b\s*(\[.*\])*):(?!:))
         beginCaptures:
@@ -364,13 +357,94 @@ repository:
             end: (?=\}|\b[a-zA-Z_][a-zA-Z_0-9]*\b\s*(\[.*\])|(\b[a-zA-Z_][a-zA-Z_0-9]*\b\s*(\[.*\])*):(?!:))
             patterns:
               - include: "#type-expr"
-
+  decl-instantiate:
+    patterns:
+      - begin: \b(instantiate)\b\s*(?=\()
+        end: (?<=\))
+        beginCaptures:
+          "1":
+            name: entity.name.function.instantiate
+        patterns:
+          - include: "#fn-args"
+      - begin: (?=\{)
+        end: (?<=\})
+        patterns:
+          - include: "#fn-body"
+  decl-exec:
+    patterns:
+      - begin: \b(exec)\b\s+(\b\w+\b)?\s*(?=\()
+        end: (?<=\))
+        beginCaptures:
+          "1":
+            name: storage.modifier.exec
+          "2":
+            name: entity.name.function.exec
+        patterns:
+          - include: "#fn-args"
+      - begin: (?=\{)
+        end: (?<=\})
+        patterns:
+          - include: "#fn-body"
+  decl-query:
+    patterns:
+      - begin: \b(query)\b\s+(\b\w+\b)?\s*(?=\()
+        end: (?<=\))
+        beginCaptures:
+          "1":
+            name: storage.modifier.query
+          "2":
+            name: entity.name.function.query
+        patterns:
+          - include: "#fn-args"
+      - begin: (?=\{)
+        end: (?<=\})
+        patterns:
+          - include: "#fn-body"
+  decl-migrate:
+    patterns:
+      - begin: \b(migrate)\b\s*(?=\()
+        end: (?<=\))
+        beginCaptures:
+          "1":
+            name: entity.name.function.migrate
+        patterns:
+          - include: "#fn-args"
+      - begin: (?=\{)
+        end: (?<=\})
+        patterns:
+          - include: "#fn-body"
+  fn-args:
+    begin: \(\s*
+    end: \s*\)
+    patterns:
+      - begin: (\b([a-zA-Z_][a-zA-Z_0-9]*)\b(\??))\s*:\s*
+        beginCaptures:
+          "1":
+            name: variable.parameter.other
+        end: (?=,|\))
+        patterns:
+          - include: "#type-expr"
+  fn-body:
+    begin: \{\s*
+    end: \s*\}
+    patterns:
+      - include: "#cwspec"
+      - include: "#comment"
+      - include: "#stmt"
+      - include: "#expr"
+  stmt:
+    patterns:
+      - include: "#cwspec"
+      - include: "#comment"
+      - include: "#let-stmt"
+  let-stmt:
+    match: \b(let)\b([a-zA-Z_][a-zA-Z_])
   type-expr:
     patterns:
       - include: "#cwspec"
       - include: "#comment"
       - include: "#keywords"
-      - include: "#punctuation"
+      - include: "#decl-struct"
       - include: "#paramzd-type"
       - include: "#type-name"
   enum-variant:
@@ -380,6 +454,7 @@ repository:
       - include: "#enum-variant-struct"
       - include: "#enum-variant-tuple"
       - include: "#enum-variant-unit"
+
   enum-variant-struct:
     begin: \b(\w+)\b\s*(\{)
     end: (\})
@@ -393,8 +468,6 @@ repository:
           "1":
             name: variable.parameter.other
         patterns:
-          - include: "#cwspec"
-          - include: "#comment"
           - include: "#type-expr"
   enum-variant-tuple:
     begin: \b([a-zA-Z_][a-zA-Z_0-9]*)\b\s*(\()
@@ -409,8 +482,6 @@ repository:
           "1":
             name: variable.parameter.other
         patterns:
-          - include: "#cwspec"
-          - include: "#comment"
           - include: "#type-expr"
       - include: "#type-expr"
   enum-variant-unit:
@@ -426,48 +497,44 @@ repository:
         name: entity.name.type.type
     end: (?=\)|\}|\s)|(>)
     patterns:
-      - include: "#cwspec"
-      - include: "#comment"
-      - include: "#punctuation"
-      - include: "#keywords"
       - include: "#type-expr"
-  # keywords-modifiers:
-  #   match: \b(mut)\b
-  #   name: storage.modifier.mut
-  # keywords-control-flow:
-  #   name: keyword.control
-  #   match: \b(if|while|for|return)\b
-  # keywords:
-  #   patterns:
-  #     - include: "#keywords-control-flow"
-  #     - include: "#keywords-modifiers"
-  # punctuation:
-  #   patterns:
-  #     - name: punctuation.accessor
-  #       match: "\\."
-  #     - name: punctuation.separator
-  #       match: ","
-  #     - name: punctuation.brace.curly.begin
-  #       match: "\\{"
-  #     - name: punctuation.brace.curly.end
-  #       match: "\\}"
-  #     - name: punctuation.brace.square.begin
-  #       match: "\\["
-  #     - name: punctuation.brace.square.begin
-  #       match: "\\]"
-  #     - name: punctuation.parameters.begin
-  #       match: "\\("
-  #     - name: punctuation.parameters.end
-  #       match: "\\)"
-  # comment:
-  #   patterns:
-  #     - include: "#comment-line"
-  #     - include: "#comment-block"
-  # comment-line:
-  #   name: "comment.line"
-  #   begin: "(?<!:)//"
-  #   end: "$"
-  # comment-block:
-  #   name: "comment.block"
-  #   begin: "/\\*"
-  #   end: "\\*/"
+  keywords-modifiers:
+    match: \b(mut)\b
+    name: storage.modifier.mut
+  keywords-control-flow:
+    name: keyword.control
+    match: \b(if|while|for|return)\b
+  keywords:
+    patterns:
+      - include: "#keywords-control-flow"
+      - include: "#keywords-modifiers"
+  punctuation:
+    patterns:
+      - name: punctuation.accessor
+        match: "\\."
+      - name: punctuation.separator
+        match: ","
+      - name: punctuation.brace.curly.begin
+        match: "\\{"
+      - name: punctuation.brace.curly.end
+        match: "\\}"
+      - name: punctuation.brace.square.begin
+        match: "\\["
+      - name: punctuation.brace.square.end
+        match: "\\]"
+      - name: punctuation.parameters.begin
+        match: "\\("
+      - name: punctuation.parameters.end
+        match: "\\)"
+  comment:
+    patterns:
+      - include: "#comment-line"
+      - include: "#comment-block"
+  comment-line:
+    name: "comment.line"
+    begin: "(?<!:)//"
+    end: "$"
+  comment-block:
+    name: "comment.block"
+    begin: "/\\*"
+    end: "\\*/"
