@@ -260,7 +260,7 @@ repository:
       - begin: \b(event)\b\s*(?=\b([a-zA-Z_][a-zA-Z_0-9]*)\b\s*\()
         end: (?<=\))
         beginCaptures:
-          "1":
+          "2":
             name: storage.type.event
         patterns:
           - include: "#enum-variant-tuple"
@@ -517,10 +517,14 @@ repository:
     match: "\b(and|or)\b"
     name: operator.logical
   arithmetic-operator:
-    match: "+|-|*|\|%"
+    match: "+|-|*|/|%"
     name: operator.arithmetic
+  assignment-operator:
+    match: (=|+=|-=|*=|/=|%=)
+    name: operator.assignment
   punctuation:
     patterns:
+      - include: "#operators"
       - name: punctuation.accessor
         match: "\\."
       - name: punctuation.separator
