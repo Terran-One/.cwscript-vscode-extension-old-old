@@ -454,7 +454,6 @@ repository:
       - include: "#enum-variant-struct"
       - include: "#enum-variant-tuple"
       - include: "#enum-variant-unit"
-
   enum-variant-struct:
     begin: \b(\w+)\b\s*(\{)
     end: (\})
@@ -498,6 +497,7 @@ repository:
     end: (?=\)|\}|\s)|(>)
     patterns:
       - include: "#type-expr"
+  
   keywords-modifiers:
     match: \b(mut)\b
     name: storage.modifier.mut
@@ -508,6 +508,17 @@ repository:
     patterns:
       - include: "#keywords-control-flow"
       - include: "#keywords-modifiers"
+  operators:
+    - patterns:
+      - include: "#logical-operator"
+      - include: "#arithmetic-operator"
+      - include: "#assignment-operator"
+  logical-operator:
+    match: "\b(and|or)\b"
+    name: operator.logical
+  arithmetic-operator:
+    match: "+|-|*|\|%"
+    name: operator.arithmetic
   punctuation:
     patterns:
       - name: punctuation.accessor
