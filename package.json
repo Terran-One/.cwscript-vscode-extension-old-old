@@ -1,13 +1,16 @@
 {
-  "name": "cwscript",
+  "name": "cwscript-vscode-extension",
   "displayName": "CWScript",
-  "description": "Language support for CWScript",
+  "description": "CWScript Language Support for Visual Studio code.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.63.0"
   },
   "categories": [
     "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:cwscript"
   ],
   "contributes": {
     "languages": [
@@ -29,13 +32,59 @@
         "scopeName": "source.cwscript",
         "path": "./syntaxes/cwscript.json"
       }
+    ],
+    "commands": [
+      {
+        "command": "countDownBlocking",
+        "title": "Count down 10 seconds [Blocking]"
+      },
+      {
+        "command": "countDownNonBlocking",
+        "title": "Count down 10 seconds [Non Blocking]"
+      },
+      {
+        "command": "progress",
+        "title": "Start the progress"
+      },
+      {
+        "command": "registerCompletions",
+        "title": "Register completions"
+      },
+      {
+        "command": "showConfigurationAsync",
+        "title": "Show Json Example Configuration [Async]"
+      },
+      {
+        "command": "showConfigurationCallback",
+        "title": "Show Json Example Configuration [Callback]"
+      },
+      {
+        "command": "showConfigurationThread",
+        "title": "Show Json Example Configuration [Thread]"
+      },
+      {
+        "command": "unregisterCompletions",
+        "title": "Unregister completions"
+      }
     ]
   },
+  "main": "./client/out/extension",
   "scripts": {
-    "build": "y2j",
-    "y2j": "js-yaml syntaxes/cwscript.yaml > syntaxes/cwscript.json"
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -b",
+    "watch": "tsc -b -w",
+    "build": "js-yaml syntaxes/cwscript.yaml > syntaxes/cwscript.json"
   },
   "devDependencies": {
-    "js-yaml": "^4.1.0"
+    "@types/node": "^17.0.9",
+    "@types/vscode": "^1.63.1",
+    "@typescript-eslint/eslint-plugin": "^5.10.0",
+    "@typescript-eslint/parser": "^5.10.0",
+    "eslint": "^8.7.0",
+    "js-yaml": "^4.1.0",
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^7.0.0"
   }
 }

@@ -1,20 +1,46 @@
 {
-    "configurations": [
-        {
-            "args": [
-                "--extensionDevelopmentPath=${workspaceFolder}",
-                "./cw20-base.cws"
-            ],
-            "name": "Launch Extension",
-            "runtimeExecutable": "${execPath}",
-            "outFiles": [
-                "${workspaceFolder}/out/**/*.js"
-            ],
-            "preLaunchTasks": "open-example",
-            "sourceMaps": true,
-            "request": "launch",
-            "type": "pwa-extensionHost",
-            "stopOnEntry": false,
-        },
-    ],
+  "configurations": [
+    {
+      "name": "Launch Client",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": ["--extensionDevelopmentPath=${workspaceRoot}"],
+      "outFiles": ["${workspaceRoot}/client/out/**/*.js"],
+      "preLaunchTask": {
+        "type": "npm",
+        "script": "compile"
+      },
+      "env": {
+        "VSCODE_DEBUG_MODE": "true"
+      }
+    },
+    {
+      "name": "Launch Server",
+      "type": "python",
+      "request": "launch",
+      "module": "cwsls",
+      "args": ["--tcp"],
+      "justMyCode": false,
+      "python": "${command:python.interpreterPath}",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Launch Server [WebSockets]",
+      "type": "python",
+      "request": "launch",
+      "module": "cwsls",
+      "args": ["--ws"],
+      "justMyCode": false,
+      "python": "${command:python.interpreterPath}",
+      "cwd": "${workspaceFolder}"
+    }
+  ],
+
+  "compounds": [
+    {
+      "name": "Server + Client",
+      "configurations": ["Launch Server", "Launch Client"]
+    }
+  ]
 }

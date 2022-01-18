@@ -1,12 +1,13 @@
 import * from "./cw20.cws"
 
+
 /// Translation of CW20-base
 /// @author William Chen <william@terran.one>
 contract CW20Base extends CW2 implements
     CW20Mintable,
     CW20Allowances,
     CW20Marketing,
-    CW20Enumerable,
+    CW20Enumerable?,
     CW20AllowancesEnumerable
 {    
 
@@ -152,6 +153,5 @@ contract CW20Base extends CW2 implements
         let minter = state.token_info.minter
         return minter
     }
-
 
 }
